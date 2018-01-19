@@ -21,6 +21,27 @@ you can just ask the MP secretary/assistant to retreive them, trusting
 that they'll manage the supply as to not use too many from the storage
 closet.
 
++________+
+
+MPenv:
+
+The MPenv structure used by this program contains a number of integer values
+for tracking and limiting the total memory usage of the program, as well as
+an array of slots. This array is not held inside the MPenv structure, but
+is an MPslot pointer. Upon calling memPlus_init(), this value is populated
+with a region of memory provided by the system, large enough to hold the
+requested number of slots.
+
+MPslot:
+
+The MPslot structure stores a void pointer returned by the system malloc()
+utility, as well as integer values that identify and record the size of this
+region. For the convenience of anyone using this library, each slot also has
+a 64-byte(63 chars followed by a null terminator) array of chars, which can
+be used to assign a name or short description to the region, if desired.
+
++________+
+
 +Makes use of an environment structure and an array of "slots" for allocated
 regions of memory. The slots function as a record of the void *memory address
 returned by malloc calls, along with some metadata for identification.
