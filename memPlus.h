@@ -1,3 +1,5 @@
+#include "./libft/libft.h"
+
 typedef	struct		s_memPlus_slot
 {
   char 						regName[64];
@@ -5,19 +7,21 @@ typedef	struct		s_memPlus_slot
   int							regSize;
   void						*mem;
   char						active;
-}									t_memPlus_slot;
+}									MPslot;
 
 typedef	struct		s_memPlus_env
 {
-  t_memPlus_slot		*slots;
+  MPslot					*slot;
   int 						numSlots;
+  int 						slotsInUse;
+  int						totalRegions;
   int							bytesInUse;
   int							byteLimit;
   int							regionLimit;
   int							bytesFree;
   int							slotsFree;
-}									t_memPlus_env;
+}									MPenv;
 
-void	memPlus_init(t_memPlus_env *env, int region_limit, int byte_limit);
-void	*memPlus_alloc(t_memPlus_env *env, int regSize, char *regName);
+int		memPlus_init(MPenv *env, int regionLimit, int byteLimit);
+MPslot	*memPlus_alloc(MPenv *env, int regSize, char *regName);
 

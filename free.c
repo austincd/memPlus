@@ -1,72 +1,73 @@
 #include "memPlus.h"
 
-void	memPlus_freeRegion(t_memPlus_reg *region)
+void	memPlus_freeRegion(MPslot *region)
 {
   if (region && region->mem && !region->active)
     {
+      ft_bzero(region->mem, region->regSize);
       free(region->mem);
-      ft_bzero(region, sizeof(t_memPlus_reg));
+      ft_bzero(region, sizeof(MPslot));
     }
 }
 
-void	memPlus_freeRegionsLargerThan(t_memPlus_env *env, int bytes)
+void	memPlus_freeRegionsLargerThan(MPenv *env, int bytes)
 {
   int	counter;
 
   counter = 0;
   if (env)
     {
-      while (counter < env->region_limit)
+		while (counter < env->numSlots)
         {
-          if (env->regions[counter].regSize > bytes)
-            memPlus_freeRegion(env->regions + counter);
+          if (env->slot[counter].regSize > bytes)
+            memPlus_freeRegion(env->slot + counter);
           ++counter;
         }
     }
 }
 
-void	memPlus_freeRegionsSmallerThan(t_memPlus_env *env, int bytes)
+void	memPlus_freeRegionsSmallerThan(MPenv *env, int bytes)
 {
   int	counter;
 
   counter = 0;
   if (env)
     {
-      while (counter < env->region_limit)
+		while (counter < env->numSlots)
         {
-          if (env->regions[counter].regSize < bytes)
-            memPlus_freeRegion(env->regions + counter);
+          if (env->slot[counter].regSize < bytes)
+            memPlus_freeRegion(env->slot + counter);
           ++counter;
         }
     }
 }
 
-void	memPlus_freeAll(t_memPlus_env *env, int bytes)
+void	memPlus_freeAll(MPenv *env, int bytes)
 {
   int	counter;
 
   counter = 0;
   if (env)
     {
-      while (counter < env->region_limit)
+      while (counter < env->numSlots)
         {
-          memPlus_freeRegion(env->regions + counter);
+          memPlus_freeRegion(env->slot + counter);
           ++counter;
         }
     }
 }
 
-void	memPlus_free(t_memPlus_env *env, int seqId)
+void	memPlus_free(MPenv *env, int seqId)
 {
   int	counter;
 
   counter = 0;
   if (env)
     {
-      while (counter < env->region_limit)
+      while (counter < env->numSlots)
         {
-          if (env->regions[counter].seqId = seqId)
-            memPlus_freeRegion(env->regions + counter);
+          if (env->slot[counter].seqId == seqId)
+            memPlus_freeRegion(env->slot + counter);
           ++counter;
         }
     }

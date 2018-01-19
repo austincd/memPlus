@@ -1,16 +1,16 @@
 #include "memPlus.h"
 
-int	memPlus_init(t_memPlus_env *env, int byteLimit, int reqSlots)
+int	memPlus_init(MPenv *env, int byteLimit, int reqSlots)
 {
   int status;
 
   status = -1;
   if (env && reqSlots > 0)
     {
-      ft_bzero(env, sizeof(t_memPlus_env));
+      ft_bzero(env, sizeof(MPenv));
       env->byteLimit = byteLimit;
-      env->slots = ft_memalloc(reqSlots * sizeof(t_memPlus_slot));
-      if (env->slots)
+      env->slot = ft_memalloc(reqSlots * sizeof(MPslot));
+      if (env->slot)
         {
           env->numSlots = reqSlots;
           status = 1;

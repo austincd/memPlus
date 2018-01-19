@@ -1,13 +1,16 @@
-int	memPlus_diag(t_memPlus_env *env, int fd)
+#include "memPlus.h"
+
+void	memPlus_diag(MPenv *env, int fd)
 {
   int counter;
 
   counter = 0;
-  if (env && env->num_regions && fd >= 0)
+  if (env && env->numSlots && fd >= 0)
     {
-      while (counter < env->num_regions)
+      while (counter < env->numSlots)
       {
-        ft_putendl_fd(env->regions[counter].name, fd);
+        ft_putendl_fd(env->slot[counter].regName, fd);
         ++counter;
       }
+	}
 }

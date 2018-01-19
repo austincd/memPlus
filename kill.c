@@ -1,73 +1,76 @@
 #include "memPlus.h"
 
-void	memPlus_killRegion(t_memPlus_reg *region)
+void	memPlus_killRegion(MPslot *region)
 {
   if (region)
     {
       if (region->mem)
-        kill(region->mem);
-      ft_bzero(region, sizeof(t_memPlus_reg));
+	  {
+		ft_bzero(region->mem, region->regSize);
+        free(region->mem);
+	  }
+      ft_bzero(region, sizeof(MPslot));
     }
 }
 
-void	memPlus_killRegionsLargerThan(t_memPlus_env *env, int bytes)
+void	memPlus_killRegionsLargerThan(MPenv *env, int bytes)
 {
   int	counter;
 
   counter = 0;
   if (env)
     {
-      while (counter < env->region_limit)
+      while (counter < env->numSlots)
         {
-          if (env->regions[counter].regSize > bytes)
-            memPlus_killRegion(env->regions + counter);
+          if (env->slot[counter].regSize > bytes)
+            memPlus_killRegion(env->slot + counter);
           ++counter;
         }
     }
 }
 
-void	memPlus_killRegionsSmallerThan(t_memPlus_env *env, int bytes)
+void	memPlus_killRegionsSmallerThan(MPenv *env, int bytes)
 {
   int	counter;
 
   counter = 0;
   if (env)
     {
-      while (counter < env->region_limit)
+      while (counter < env->numSlots)
         {
-          if (env->regions[counter].regSize < bytes)
-            memPlus_killRegion(env->regions + counter);
+          if (env->slot[counter].regSize < bytes)
+            memPlus_killRegion(env->slot + counter);
           ++counter;
         }
     }
 }
 
-void	memPlus_killAll(t_memPlus_env *env, int bytes)
+void	memPlus_killAll(MPenv *env, int bytes)
 {
   int	counter;
 
   counter = 0;
   if (env)
     {
-      while (counter < env->region_limit)
+      while (counter < env->numSlots)
         {
-          memPlus_killRegion(env->regions + counter);
+          memPlus_killRegion(env->slot + counter);
           ++counter;
         }
     }
 }
 
-void	memPlus_kill(t_memPlus_env *env, int seqId)
+void	memPlus_kill(MPenv *env, int seqId)
 {
   int	counter;
 
   counter = 0;
   if (env)
     {
-      while (counter < env->region_limit)
+      while (counter < env->numSlots)
         {
-          if (env->regions[counter].seqId = seqId)
-            memPlus_killRegion(env->regions + counter);
+          if (env->slot[counter].seqId == seqId)
+            memPlus_killRegion(env->slot + counter);
           ++counter;
         }
     }
