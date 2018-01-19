@@ -1,5 +1,26 @@
 Tools to help automate memory management and tracking in C.
 
+To illustrate the use of 'slots', we display the following explanation:
+
+One might think of a slot the way it would usually be used. Think of it
+as a port through which we might be able to access some region of NAND
+memory, sized and allocated at runtime. "memPlus" creates a limited number
+of slots in memory at runtime, and whenever the program needs to allocate
+another region of memory by interfacing with the system, the data needed
+to access it is stored in that slot.
+
+The whole slot mechanism is just a middleman. It in itself isn't really
+meant to offer anything, but rather just allow the use of other features,
+like recording data about memory allocation calls so they can be freed
+automatically, or preventing memory allocation from going beyond some
+runtime-set limit, which can be useful for debugging and preventing
+memory leaks.
+
+Instead of just asking the system to give you a region of a certain size,
+you can just ask the MP secretary/assistant to retreive them, trusting
+that they'll manage the supply as to not use too many from the storage
+closet.
+
 +Makes use of an environment structure and an array of "slots" for allocated
 regions of memory. The slots function as a record of the void *memory address
 returned by malloc calls, along with some metadata for identification.
